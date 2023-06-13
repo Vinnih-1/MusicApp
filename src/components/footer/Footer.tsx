@@ -2,6 +2,7 @@ import React from "react";
 
 import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Image } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
+const musicIcon = require("./../../assets/music_icon.png")
 
 const height = Dimensions.get("window").height / 8;
 
@@ -9,7 +10,7 @@ export function Footer() {
     return(
         <View style={styles.container}>
             <View>
-                <Image style={styles.image} source={require("../../../assets/music-icon.png")}/>
+                <Image style={styles.image} source={musicIcon}/>
             </View>
             <View style={styles.icons}>
                 <TouchableOpacity>
