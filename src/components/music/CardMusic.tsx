@@ -3,7 +3,7 @@ import React from "react";
 import { View, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 
 import Icon from "react-native-vector-icons/Ionicons";
-
+const musicIcon = require("./../../assets/music_icon.png")
 const height = Dimensions.get("window").height / 10; 
 const width = Dimensions.get("window").width / 1.8;
 
@@ -16,7 +16,7 @@ interface CardProps {
 export function CardMusic(props: CardProps) {
     return(
         <TouchableOpacity style={styles.container}>
-            <Image style={styles.image} source={require("../../../assets/music-icon.png")}/>
+            <Image style={styles.image} source={musicIcon}/>
             <View style={styles.info}>
                 <Text style={styles.title}>{props.title}</Text>
                 <Text style={styles.author}>Autor desconhecido</Text>
