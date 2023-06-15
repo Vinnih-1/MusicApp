@@ -1,6 +1,6 @@
 import React from "react";
 
-import { View, StyleSheet, Text, Dimensions, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Dimensions, TouchableOpacity, Image } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 const musicIcon = require("./../../assets/music_icon.png")
 
