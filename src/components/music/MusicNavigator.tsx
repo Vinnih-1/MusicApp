@@ -43,6 +43,15 @@ export function MusicNavigator() {
     }
 
     const renderMusicCard = () => {
+        if (musics.length == 0) {
+            return(
+                <View style={{flex: 1, height: height / 1.5, justifyContent: "center", alignItems: "center"}}>
+                    <Text style={{color: "white"}}>Nenhuma música encontrada na pasta</Text>
+                    <Text style={{color: "white"}}>storage/emulated/0/Music/</Text>
+                </View>
+            );
+        }
+
         return (
             musics.map((music) => (
                 <View key={music.title}>
