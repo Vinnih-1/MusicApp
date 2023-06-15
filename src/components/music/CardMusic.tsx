@@ -3,9 +3,9 @@ import React from "react";
 import { View, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 
 import Icon from "react-native-vector-icons/Ionicons";
-import { MusicProps } from "../../pages/MusicNavigator";
+import { MusicProps } from "../../pages/player/MusicNavigator";
 
-const musicIcon = require("./../../../assets/music_icon.png")
+const musicIcon = require("./../../assets/music_icon.png")
 const height = Dimensions.get("window").height / 10; 
 const width = Dimensions.get("window").width / 1.8;
 
@@ -16,7 +16,7 @@ export function CardMusic(props: MusicProps) {
         >
             <Image style={styles.image} source={musicIcon}/>
             <View style={styles.info}>
-                <Text style={styles.title}>{props.title.substring(0, 18)}</Text>
+                <Text style={styles.title}>{props.title.substring(0, 25).replace(".mp3", "")}</Text>
                 <Text style={styles.author}>Autor Desconhecido</Text>
             </View>
             <Icon color={"white"} size={45} name="play-circle-outline"/>
