@@ -3,23 +3,19 @@ import React from "react";
 import { View, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 
 import Icon from "react-native-vector-icons/Ionicons";
-const musicIcon = require("./../../assets/music_icon.png")
+import { MusicProps } from "../MusicNavigator";
+
+const musicIcon = require("./../../../assets/music_icon.png")
 const height = Dimensions.get("window").height / 10; 
 const width = Dimensions.get("window").width / 1.8;
 
-interface CardProps {
-    title: string;
-    image?: string;
-    address?: string;
-}
-
-export function CardMusic(props: CardProps) {
+export function CardMusic(props: MusicProps) {
     return(
         <TouchableOpacity style={styles.container}>
             <Image style={styles.image} source={musicIcon}/>
             <View style={styles.info}>
-                <Text style={styles.title}>{props.title}</Text>
-                <Text style={styles.author}>Autor desconhecido</Text>
+                <Text style={styles.title}>{props.title.substring(0, 18)}</Text>
+                <Text style={styles.author}>Autor Desconhecido</Text>
             </View>
             <Icon color={"white"} size={45} name="play-circle-outline"/>
         </TouchableOpacity>
@@ -48,8 +44,8 @@ const styles = StyleSheet.create({
     },
     title: {
         color: "white",
-        fontWeight: "600",
-        fontSize: 20
+        fontWeight: "400",
+        fontSize: 18
     },
     author: {
         color: "#545863",
