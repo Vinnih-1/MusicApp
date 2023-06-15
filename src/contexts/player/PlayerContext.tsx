@@ -3,9 +3,13 @@ import React, { ReactNode, createContext, useState, useEffect  } from "react";
 import { Audio } from "expo-av";
 import { MusicProps } from "../../pages/player/MusicNavigator";
 
+import * as KeepAwake from "expo-keep-awake";
+
 export interface PlayerContextProps {
     playAsync: (props: MusicProps) => void;
     stopAsync: () => void;
+    playing: boolean;
+    currentSong: string;
   }
   
   export const PlayerContext = createContext<PlayerContextProps | undefined>(undefined);
@@ -16,6 +20,7 @@ export interface PlayerContextProps {
   
   export function PlayerProvider({ children }: PlayerProviderProps) {
     const [playing, setPlaying] = useState(false);
+    const [currentSong, setCurrentSong] = useState("");
     const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
   
     useEffect(() => {
@@ -28,16 +33,20 @@ export interface PlayerContextProps {
   
     const playAsync = async (props: MusicProps) => {
       if (playing) stopAsync();
+
+        await Audio.setAudioModeAsync({
+          shouldDuckAndroid: false,
+          staysActiveInBackground: true
+        });
   
-      try {
-        const newSoundObject = new Audio.Sound();
-        await newSoundObject.loadAsync({ uri: props.uri });
-        await newSoundObject.playAsync();
-        setCurrentSound(newSoundObject);
+        const audio = new Audio.Sound();
+        await audio.loadAsync({ uri: props.uri });
+        await audio.playAsync();
+        setCurrentSound(audio);
         setPlaying(true);
-      } catch (error) {
-        console.log(error);
-      }
+        setCurrentSong(props.uri);
+        
+        KeepAwake.activateKeepAwakeAsync();
     };
   
     const stopAsync = async () => {
@@ -46,6 +55,7 @@ export interface PlayerContextProps {
           await currentSound.stopAsync();
           setCurrentSound(null);
           setPlaying(false);
+          setCurrentSong("");
         }
       } catch (error) {
         console.log(error);
@@ -55,6 +65,8 @@ export interface PlayerContextProps {
     const contextValues: PlayerContextProps = {
       playAsync,
       stopAsync,
+      playing,
+      currentSong
     };
   
     return (
