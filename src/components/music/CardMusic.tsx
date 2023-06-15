@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 
 import { View, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from "react-native";
-
-import Icon from "react-native-vector-icons/Ionicons";
 import { MusicProps } from "../../pages/player/MusicNavigator";
 import { PlayerContext } from "../../contexts/player/PlayerContext";
+
+import Icon from "react-native-vector-icons/Ionicons";
 
 const musicIcon = require("./../../assets/music_icon.png")
 const height = Dimensions.get("window").height / 10; 
@@ -13,7 +13,6 @@ const width = Dimensions.get("window").width / 1.8;
 export function CardMusic(props: MusicProps) {
     const context = useContext(PlayerContext);
     
-
     return(
         <TouchableOpacity style={styles.container}
             onPress={() => context?.playAsync(props)}
@@ -23,7 +22,13 @@ export function CardMusic(props: MusicProps) {
                 <Text style={styles.title}>{props.title.substring(0, 25).replace(".mp3", "")}</Text>
                 <Text style={styles.author}>Autor Desconhecido</Text>
             </View>
-            <Icon color={"white"} size={45} name="play-circle-outline"/>
+            {
+                context?.currentSong === props.uri
+                ?
+                <Icon color={"white"} size={45} name="pause-circle-outline"/>
+                :
+                <Icon color={"white"} size={45} name="play-circle-outline"/>
+            }
         </TouchableOpacity>
     );
 }
