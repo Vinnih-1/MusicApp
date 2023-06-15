@@ -67,11 +67,7 @@ export function MusicNavigator() {
 
     useEffect(() => {
         requestPermissions();
-        searchAllMusics().then(() => {
-            setTimeout(() => {
-                setLoading(false);
-            }, 5000);
-        });
+        searchAllMusics().then(() => setLoading(false));
     }, []);
 
     if (loading) {
