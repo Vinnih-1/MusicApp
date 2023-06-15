@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { Navbar } from './src/components/navbar/Navbar';
 import { Footer } from './src/components/footer/Footer';
-import { MusicNavigator } from './src/components/music/MusicNavigator';
+import { MusicNavigator } from './src/pages/MusicNavigator';
 import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
