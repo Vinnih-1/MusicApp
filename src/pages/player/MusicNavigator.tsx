@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { StyleSheet, Dimensions, ScrollView, View, Text } from "react-native";
-import { CardMusic } from "../components/music/CardMusic";
+import { CardMusic } from "../../components/music/CardMusic";
 
 import * as MediaLibrary from 'expo-media-library';
 
