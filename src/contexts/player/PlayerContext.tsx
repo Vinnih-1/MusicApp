@@ -32,9 +32,27 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
       }
     };
   }, [currentSound]);
+
+  useEffect(() => {
+    if (!music) return;
+    const intervalId = setInterval(() => {
+      if (music.status == PlayerStatus.PAUSED) {
+        pauseAsync();
+        return;
+      }
+
+      if (music.duration > music.position) music.position++;
+      else stopInterval();
+    }, 1000);
+
+    const stopInterval = () => {
+      clearInterval(intervalId);
+      console.log(`Intervalo da música ${music.title} parado.`);
+    }
+  }, [music]);
   
   const playAsync = async (props: MusicProps) => {
-    if (music?.status == PlayerStatus.PLAYING) stopAsync();
+    if (playing) stopAsync();
 
       await Audio.setAudioModeAsync({
         shouldDuckAndroid: false,
@@ -49,8 +67,6 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
       if (music) music.status = PlayerStatus.PLAYING;
       setMusic(props);
       setPlaying(true);
-
-      console.log(music)
   };
   
   const stopAsync = async () => {
@@ -59,7 +75,6 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
     await currentSound.stopAsync();
     setCurrentSound(null);
     if (music) {
-      music.status = PlayerStatus.STOPPED;
       setMusic(music);   
       setPlaying(false);     
     }
@@ -78,8 +93,11 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
 
   const resumeAsync = async () => {
     if (!currentSound) return;
-    // todo: fazer sistema para retormar a música de onde parou
-    console.log("implementando...");
+    if (!music) return;
+    await currentSound.playFromPositionAsync(music.position * 1000);
+    music.status = PlayerStatus.PLAYING;
+    setMusic(music);
+    setPlaying(true);
   }
 
   const contextValues: PlayerContextProps = {
