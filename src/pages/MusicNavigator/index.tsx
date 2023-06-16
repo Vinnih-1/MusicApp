@@ -4,7 +4,6 @@ import { StyleSheet, Dimensions, ScrollView, View, Text } from "react-native";
 import { CardMusic } from "../../components/CardMusic";
 import MusicService from "../../services/MusicService";
 
-import * as MediaLibrary from 'expo-media-library';
 
 const height = Dimensions.get("window").height;
 
