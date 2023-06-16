@@ -24,30 +24,6 @@ export function MusicNavigator() {
     const [loading, setLoading] = useState(true);
     const [musics, setMusics] = useState<MusicProps[]>([]);
 
-    const renderMusicCard = () => {
-        if (musics.length == 0) {
-            return(
-                <View style={{flex: 1, height: height / 1.5, justifyContent: "center", alignItems: "center"}}>
-                    <Text style={{color: "white"}}>Nenhuma música encontrada na pasta</Text>
-                    <Text style={{color: "white"}}>storage/emulated/0/Music/</Text>
-                </View>
-            );
-        }
-
-        return (
-            musics.map((music) => (
-                <View key={music.title}>
-                    <CardMusic 
-                        title={music.title}
-                        duration={music.duration}
-                        uri={music.uri}
-                        status={music.status}
-                        position={0}
-                    />
-                </View>
-            ))
-        );
-      };
 
     useEffect(() => {
         MusicService.requestPermissions();
@@ -67,7 +43,24 @@ export function MusicNavigator() {
     
     return(
         <ScrollView style={styles.container}>
-            {renderMusicCard()}
+            {musics.length == 0 ?(
+                <View style={{flex: 1, height: height / 1.5, justifyContent: "center", alignItems: "center"}}>
+                <Text style={{color: "white"}}>Nenhuma música encontrada na pasta</Text>
+                <Text style={{color: "white"}}>storage/emulated/0/Music/</Text>
+                </View>
+            ):(
+                musics.map((music) => (
+                    <View key={music.title}>
+                        <CardMusic 
+                            title={music.title}
+                            duration={music.duration}
+                            uri={music.uri}
+                            status={music.status}
+                            position={0}
+                        />
+                    </View>
+                ))
+            )}
         </ScrollView>
     );
 }
