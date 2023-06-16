@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
-const musicIcon = require("./../../assets/music_icon.png")
+import { PlayerContext } from "../../contexts/player/PlayerContext";
+import { PlayerStatus } from "../../pages/player/MusicNavigator";
 
-const height = Dimensions.get("window").height / 8;
+import Icon from "react-native-vector-icons/Ionicons";
+
+const musicIcon = require("./../../assets/music_icon.png")
+const height = Dimensions.get("window").height / 6;
 
 export function Footer() {
+    const context = useContext(PlayerContext);
+
     return(
         <View style={styles.container}>
             <View>
@@ -16,8 +21,19 @@ export function Footer() {
                 <TouchableOpacity>
                     <Icon color={"white"} size={45} name="play-skip-back-circle-outline"/>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Icon color={"white"} size={45} name="play-circle-outline"/>
+                <TouchableOpacity
+                    onPress={() => {
+                        if (context?.playing) context.pauseAsync();
+                        else context?.resumeAsync();
+                    }}
+                >
+                    {
+                        context?.playing
+                        ?
+                        <Icon color={"white"} size={45} name="pause-circle-outline"/>
+                        :
+                        <Icon color={"white"} size={45} name="play-circle-outline"/>
+                    }
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <Icon color={"white"} size={45} name="play-skip-forward-circle-outline"/>
@@ -32,7 +48,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         alignItems: "center",
-        backgroundColor: "#1b2021",
+        backgroundColor: "#24272B",
         maxHeight: height,
     },
     icons: {
@@ -47,6 +63,6 @@ const styles = StyleSheet.create({
         height: 55,
         width: 55,
         marginLeft: 20,
-        borderRadius: 10
+        borderRadius: 10,
     }
 });
