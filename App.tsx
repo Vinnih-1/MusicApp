@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native';
-import { Navbar } from './src/components/navbar/Navbar';
+import { Navbar } from './src/components/Navbar';
 import { Footer } from './src/components/footer/Footer';
-import { MusicNavigator } from './src/pages/player/MusicNavigator';
+import { MusicNavigator } from './src/pages/MusicNavigator';
 import { StatusBar } from 'expo-status-bar';
-import { PlayerProvider } from './src/contexts/player/PlayerContext';
+import { PlayerProvider } from './src/components/PlayerContext';
 
 export default function App() {
   return (
