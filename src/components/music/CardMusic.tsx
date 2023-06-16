@@ -23,7 +23,7 @@ export function CardMusic(props: MusicProps) {
                 <Text style={styles.author}>Autor Desconhecido</Text>
             </View>
             {
-                context?.currentSong === props.uri
+                context?.music?.uri === props.uri
                 ?
                 <Icon color={"white"} size={45} name="pause-circle-outline"/>
                 :

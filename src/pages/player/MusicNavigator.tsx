@@ -7,12 +7,16 @@ import * as MediaLibrary from 'expo-media-library';
 
 const height = Dimensions.get("window").height;
 
+export enum PlayerStatus {
+    STOPPED, PAUSED, PLAYING, NONE
+}
+
 export interface MusicProps {
     title: string;
-    author?: string;
-    image?: string;
     duration: number;
     uri: string;
+    status: PlayerStatus;
+    position: number;
 }
 
 export function MusicNavigator() {
@@ -35,8 +39,10 @@ export function MusicNavigator() {
 
         const musics = filteredMusic.map(music => ({
             title: music.filename,
-            duration: music.duration,
-            uri: music.uri
+            duration: Math.floor(music.duration),
+            uri: music.uri,
+            status: PlayerStatus.STOPPED,
+            position: 0
         }));
 
         setMusics(musics);
@@ -56,9 +62,11 @@ export function MusicNavigator() {
             musics.map((music) => (
                 <View key={music.title}>
                     <CardMusic 
-                    title={music.title}
-                    duration={music.duration}
-                    uri={music.uri}
+                        title={music.title}
+                        duration={music.duration}
+                        uri={music.uri}
+                        status={music.status}
+                        position={0}
                     />
                 </View>
             ))
