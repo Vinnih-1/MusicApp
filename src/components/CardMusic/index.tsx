@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 
 import { View, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from "react-native";
-import { MusicProps } from "../../pages/Home";
 import { PlayerContext } from "../PlayerContext";
 
 import Icon from "react-native-vector-icons/Ionicons";
+import { MusicProps } from "../../services/MusicService";
 
 const musicIcon = require("./../../assets/music_icon.png")
 const height = Dimensions.get("window").height / 10; 
