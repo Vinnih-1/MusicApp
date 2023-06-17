@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { Navbar } from './src/components/Navbar';
-import { Footer } from './src/components/Footer/Footer';
+import { Footer } from './src/components/Footer';
 import { MusicNavigator } from './src/pages/MusicNavigator';
 import { StatusBar } from 'expo-status-bar';
 import { PlayerProvider } from './src/components/PlayerContext';
