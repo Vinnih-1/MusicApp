@@ -17,7 +17,9 @@ export function Footer() {
                 <Image style={styles.image} source={musicIcon}/>
             </View>
             <View style={styles.icons}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={context?.previousAsync}
+                >
                     <Icon color={"white"} size={45} name="play-skip-back-circle-outline"/>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -34,7 +36,9 @@ export function Footer() {
                         <Icon color={"white"} size={45} name="play-circle-outline"/>
                     }
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={context?.nextAsync}
+                >
                     <Icon color={"white"} size={45} name="play-skip-forward-circle-outline"/>
                 </TouchableOpacity>
             </View>
