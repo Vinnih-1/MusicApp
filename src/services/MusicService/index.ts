@@ -13,8 +13,6 @@ export interface MusicProps {
     position: number;
 }
 
-export const [musics, setMusics] = useState<MusicProps>();
-
 class MusicService {
     async requestPermissions() {
         const { granted } = await MediaLibrary.requestPermissionsAsync();
@@ -32,12 +30,11 @@ class MusicService {
 
         const musics = filteredMusic.map(music => ({
             title: music.filename,
-            duration: Math.floor(music.duration),
+            duration: Math.round(music.duration) * 1020,
             uri: music.uri,
             status: PlayerStatus.STOPPED,
             position: 0
         }));
-
         return musics;
     }
 }
