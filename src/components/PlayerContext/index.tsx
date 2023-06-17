@@ -3,13 +3,15 @@ import React, { ReactNode, createContext, useState, useEffect  } from "react";
 import { Audio } from "expo-av";
 
 import * as KeepAwake from "expo-keep-awake";
-import { MusicProps, PlayerStatus } from "../../services/MusicService";
+import MusicService, { MusicProps, PlayerStatus } from "../../services/MusicService";
 
 export interface PlayerContextProps {
     playAsync: (props: MusicProps) => void;
     stopAsync: () => void;
     pauseAsync: () => void;
     resumeAsync: () => void;
+    nextAsync: () => void;
+    previousAsync: () => void;
     music: MusicProps | undefined;
     playing: boolean;
 }
@@ -24,7 +26,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   const [music, setMusic] = useState<MusicProps>();
   const [playing, setPlaying] = useState(false);
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
-  
+
   useEffect(() => {
     return () => {
       if (currentSound) {
@@ -34,23 +36,27 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   }, [currentSound]);
 
   useEffect(() => {
-    if (!music) return;
     const intervalId = setInterval(() => {
+      if (!music) return;
       if (music.status == PlayerStatus.PAUSED) {
         pauseAsync();
         return;
       }
 
-      if (music.duration > music.position) music.position++;
-      else stopInterval();
-    }, 1000);
-
-    const stopInterval = () => {
-      clearInterval(intervalId);
-      console.log(`Intervalo da música ${music.title} parado.`);
-    }
+      if (music.duration > music.position && music.position != -1) {
+        music.position = music.position + 20;
+      } else if (music.position == -1) {
+        clearInterval(intervalId);
+        console.log(`Intervalo da música ${music.title} parado.`);
+      } else {
+        clearInterval(intervalId);
+        console.log(`Intervalo da música ${music.title} parado.`);
+        nextAsync();
+      }
+      console.log(`${music.position} - ${music.duration}: ${music.title}`)
+    }, 1);
   }, [music]);
-  
+
   const playAsync = async (props: MusicProps) => {
     if (playing) stopAsync();
 
@@ -70,13 +76,17 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   };
   
   const stopAsync = async () => {
+    if (music) {
+      music.position = -1;
+    }
+    console.log(`Parando de tocar a música: ${music?.title}`);
     if (!currentSound) return;
-
+  
     await currentSound.stopAsync();
     setCurrentSound(null);
     if (music) {
       setMusic(music);   
-      setPlaying(false);     
+      setPlaying(false);
     }
   };
 
@@ -94,17 +104,39 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   const resumeAsync = async () => {
     if (!currentSound) return;
     if (!music) return;
-    await currentSound.playFromPositionAsync(music.position * 1000);
+    await currentSound.playFromPositionAsync(music.position);
     music.status = PlayerStatus.PLAYING;
     setMusic(music);
     setPlaying(true);
   }
 
+  const nextAsync = async () => {
+    if (!music) return;
+    stopAsync();
+    const musics = await MusicService.searchAllMusics();
+    const index = musics.findIndex(list => list.uri === music.uri) + 1;
+    if (index < musics.length) {
+      const nextMusic = musics[index];
+      playAsync(nextMusic);
+    }
+  }
+
+  const previousAsync = async () => {
+    if (!music) return;
+    stopAsync();
+    const musics = await MusicService.searchAllMusics();
+    const index = musics.findIndex(list => list.uri === music.uri) - 1;
+    if (index == -1) playAsync(musics[0]);
+    else playAsync(musics[index]);
+  }
+  
   const contextValues: PlayerContextProps = {
     playAsync,
     stopAsync,
     pauseAsync,
     resumeAsync,
+    nextAsync,
+    previousAsync,
     music,
     playing
   };
