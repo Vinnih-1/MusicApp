@@ -19,7 +19,7 @@ export interface MusicProps {
     position: number;
 }
 
-export function MusicNavigator() {
+export function Home() {
     const [loading, setLoading] = useState(true);
     const [musics, setMusics] = useState<MusicProps[]>([]);
 

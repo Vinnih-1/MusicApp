@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image } from "react-native";
 import { PlayerContext } from "../PlayerContext";
-import { PlayerStatus } from "../../pages/MusicNavigator";
+import { PlayerStatus } from "../../pages/Home";
 
 import Icon from "react-native-vector-icons/Ionicons";
 
