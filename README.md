@@ -23,3 +23,6 @@ Page Home:
 - useContext
 - useEffect
 - useState
+
+# Contributor
+- [@Mikael Oliveira](https://github.com/LordBluue3)
