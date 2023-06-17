@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import * as MediaLibrary from 'expo-media-library';
+
 export enum PlayerStatus {
     STOPPED, PAUSED, PLAYING, NONE
 }
+
 export interface MusicProps {
     title: string;
     duration: number;
@@ -10,7 +13,9 @@ export interface MusicProps {
     position: number;
 }
 
-class MusicService{
+export const [musics, setMusics] = useState<MusicProps>();
+
+class MusicService {
     async requestPermissions() {
         const { granted } = await MediaLibrary.requestPermissionsAsync();
         if (!granted) {

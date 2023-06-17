@@ -2,27 +2,13 @@ import React, { useEffect, useState } from "react";
 
 import { StyleSheet, Dimensions, ScrollView, View, Text } from "react-native";
 import { CardMusic } from "../../components/CardMusic";
-import MusicService from "../../services/MusicService";
-
+import MusicService, { MusicProps } from "../../services/MusicService";
 
 const height = Dimensions.get("window").height;
-
-export enum PlayerStatus {
-    STOPPED, PAUSED, PLAYING, NONE
-}
-
-export interface MusicProps {
-    title: string;
-    duration: number;
-    uri: string;
-    status: PlayerStatus;
-    position: number;
-}
 
 export function Home() {
     const [loading, setLoading] = useState(true);
     const [musics, setMusics] = useState<MusicProps[]>([]);
-
 
     useEffect(() => {
         MusicService.requestPermissions();
