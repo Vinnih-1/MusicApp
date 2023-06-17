@@ -1,7 +1,7 @@
 import React, { ReactNode, createContext, useState, useEffect  } from "react";
 
 import { Audio } from "expo-av";
-import { MusicProps, PlayerStatus } from "../../pages/MusicNavigator";
+import { MusicProps, PlayerStatus } from "../../pages/Home";
 
 import * as KeepAwake from "expo-keep-awake";
 
