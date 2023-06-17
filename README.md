@@ -7,7 +7,7 @@ Page Home:
 # TO-DO
 
 - Playlist system
-- Play skip back button and play skip forward button
+- ~~Play skip back button and play skip forward button~~
 - Configuration page
 - Sidebar
 
