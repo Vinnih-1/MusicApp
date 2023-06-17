@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import { View, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from "react-native";
-import { MusicProps } from "../../pages/MusicNavigator";
+import { MusicProps } from "../../pages/Home";
 import { PlayerContext } from "../PlayerContext";
 
 import Icon from "react-native-vector-icons/Ionicons";
