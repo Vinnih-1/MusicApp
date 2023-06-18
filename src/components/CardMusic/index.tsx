@@ -22,13 +22,9 @@ export function CardMusic(props: MusicProps) {
                 <Text style={styles.title}>{props.title.substring(0, 25).replace(".mp3", "")}</Text>
                 <Text style={styles.author}>Autor Desconhecido</Text>
             </View>
-            {
-                context?.music?.uri === props.uri
-                ?
-                <Icon color={"white"} size={45} name="pause-circle-outline"/>
-                :
-                <Icon color={"white"} size={45} name="play-circle-outline"/>
-            }
+            <TouchableOpacity>
+                <Icon style={{marginLeft: 30}} color={"white"} size={20} name="ellipsis-horizontal-sharp"/>
+            </TouchableOpacity>
         </TouchableOpacity>
     );
 }
@@ -51,7 +47,7 @@ const styles = StyleSheet.create({
     info: {
         flex: 1,
         marginLeft: 20,
-        maxWidth: width
+        maxWidth: width,
     },
     title: {
         color: "white",
