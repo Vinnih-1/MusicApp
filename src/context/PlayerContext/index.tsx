@@ -48,12 +48,12 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
         music.status = PlayerStatus.NONE;
         nextAsync();
       }
-      console.log(`${music.position} - ${music.duration}: ${music.title}`)
+      console.log(`${music.position.toFixed(1)} - ${music.duration}: ${music.title}`)
     }, 100);
   }, [music]);
 
   const playAsync = async (props: MusicProps) => {
-      stopAsync();
+      await stopAsync();
 
       await Audio.setAudioModeAsync({
         shouldDuckAndroid: false,
@@ -75,7 +75,6 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
       music.status = PlayerStatus.STOPPED;
       music.position = 0;
       setMusic(music);
-      console.log(`Parando de tocar a música: ${music?.title}`);
     }
     if (!currentSound) return;
     await currentSound.stopAsync();
@@ -84,6 +83,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
       setMusic(music);   
       setPlaying(false);
     }
+    console.log(`Parando de tocar a música: ${music?.title}`);
   };
 
   const pauseAsync = async () => {
