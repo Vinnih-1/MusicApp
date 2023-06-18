@@ -14,6 +14,12 @@ export interface PlayerContextProps {
     previousAsync: () => void;
     music: MusicProps | undefined;
     playing: boolean;
+    options: PlayerOptionsProps;
+}
+
+interface PlayerOptionsProps {
+  repeat: boolean;
+  random: boolean;
 }
   
 export const PlayerContext = createContext<PlayerContextProps | undefined>(undefined);
@@ -26,6 +32,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   const [music, setMusic] = useState<MusicProps>();
   const [playing, setPlaying] = useState(false);
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
+  const [options] = useState<PlayerOptionsProps>({ random: false, repeat: false });
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -37,7 +44,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
       }
 
       if (music.duration > music.position && music.status != PlayerStatus.STOPPED) {
-        music.position = music.position + (1 / 10);
+        music.position = music.position + 1;
       } else if (music.status == PlayerStatus.STOPPED) {
         clearInterval(intervalId);
         console.log(`Intervalo da música ${music.title} parado.`);
@@ -49,7 +56,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
         nextAsync();
       }
       console.log(`${music.position.toFixed(1)} - ${music.duration}: ${music.title}`)
-    }, 100);
+    }, 1000);
   }, [music]);
 
   const playAsync = async (props: MusicProps) => {
@@ -108,13 +115,18 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
 
   const nextAsync = async () => {
     if (!music) return;
-    stopAsync();
+
     const musics = await MusicService.searchAllMusics();
     const index = musics.findIndex(list => list.uri === music.uri) + 1;
-    if (index < musics.length) {
+    if (options.random) musics.sort();
+    if (index == musics.length) playAsync(musics[index - 1])
+    else {
+      console.log(`${index} - ${musics.length}`);
       const nextMusic = musics[index];
       playAsync(nextMusic);
+      return;
     }
+    if (options.repeat) playAsync(musics[0]);
   }
 
   const previousAsync = async () => {
@@ -134,7 +146,8 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
     nextAsync,
     previousAsync,
     music,
-    playing
+    playing,
+    options
   };
   
   return (
