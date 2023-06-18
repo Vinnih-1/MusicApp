@@ -28,37 +28,32 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   const [currentSound, setCurrentSound] = useState<Audio.Sound | null>(null);
 
   useEffect(() => {
-    return () => {
-      if (currentSound) {
-        currentSound.unloadAsync();
-      }
-    };
-  }, [currentSound]);
-
-  useEffect(() => {
     const intervalId = setInterval(() => {
       if (!music) return;
       if (music.status == PlayerStatus.PAUSED) {
-        pauseAsync();
+        console.log(`Intervalo da música ${music.title} pausado.`);
+        clearInterval(intervalId);
         return;
       }
 
-      if (music.duration > music.position && music.position != -1) {
-        music.position = music.position + 20;
-      } else if (music.position == -1) {
+      if (music.duration > music.position && music.status != PlayerStatus.STOPPED) {
+        music.position = music.position + 1;
+      } else if (music.status == PlayerStatus.STOPPED) {
         clearInterval(intervalId);
         console.log(`Intervalo da música ${music.title} parado.`);
+        music.status = PlayerStatus.NONE;
       } else {
         clearInterval(intervalId);
         console.log(`Intervalo da música ${music.title} parado.`);
+        music.status = PlayerStatus.NONE;
         nextAsync();
       }
       console.log(`${music.position} - ${music.duration}: ${music.title}`)
-    }, 1);
+    }, 1000);
   }, [music]);
 
   const playAsync = async (props: MusicProps) => {
-    if (playing) stopAsync();
+      stopAsync();
 
       await Audio.setAudioModeAsync({
         shouldDuckAndroid: false,
@@ -77,11 +72,12 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   
   const stopAsync = async () => {
     if (music) {
-      music.position = -1;
+      music.status = PlayerStatus.STOPPED;
+      music.position = 0;
+      setMusic(music);
+      console.log(`Parando de tocar a música: ${music?.title}`);
     }
-    console.log(`Parando de tocar a música: ${music?.title}`);
     if (!currentSound) return;
-  
     await currentSound.stopAsync();
     setCurrentSound(null);
     if (music) {
@@ -105,10 +101,10 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
     if (!currentSound) return;
     if (!music) return;
     await currentSound.playFromPositionAsync(music.position);
-    music.status = PlayerStatus.PLAYING;
-    setMusic(music);
+    const updatedMusic = { ...music, status: PlayerStatus.PLAYING };
+    setMusic(updatedMusic);
     setPlaying(true);
-  }
+  };
 
   const nextAsync = async () => {
     if (!music) return;
