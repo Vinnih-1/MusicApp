@@ -100,7 +100,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   const resumeAsync = async () => {
     if (!currentSound) return;
     if (!music) return;
-    await currentSound.playFromPositionAsync(music.position);
+    await currentSound.playFromPositionAsync(music.position * 1000);
     const updatedMusic = { ...music, status: PlayerStatus.PLAYING };
     setMusic(updatedMusic);
     setPlaying(true);
