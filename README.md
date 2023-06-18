@@ -2,7 +2,7 @@
 
 Page Home:
 
-<img src="https://cdn.discordapp.com/attachments/701489669673844887/1119362476404916346/image.png"/>
+![Screenshot_20230618-170312](https://github.com/Vinnih-1/MusicApp/assets/59892753/5a6c62db-4025-4218-a9aa-d03877196900)
 
 # TO-DO
 
