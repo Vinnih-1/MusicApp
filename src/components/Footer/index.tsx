@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text } from "react-native";
-import { PlayerContext } from "../PlayerContext";
+import { PlayerContext } from "../../context/PlayerContext";
 import * as Progress from "react-native-progress";
 
 import Icon from "react-native-vector-icons/Ionicons";
