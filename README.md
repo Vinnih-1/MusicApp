@@ -2,7 +2,7 @@
 
 Page Home:
 
-![Screenshot_20230618-170312](https://github.com/Vinnih-1/MusicApp/assets/59892753/5a6c62db-4025-4218-a9aa-d03877196900)
+![Screenshot_20230618-170312](https://github.com/Vinnih-1/MusicApp/assets/59892753/680b8a21-1d9a-44ee-8618-0f46551a372d)
 
 # TO-DO
 
