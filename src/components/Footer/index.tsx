@@ -9,11 +9,13 @@ import Icon from "react-native-vector-icons/Ionicons";
 const musicIcon = require("./../../assets/music_icon.png")
 
 const width = Dimensions.get("window").width / 1.3;
-const height = Dimensions.get("window").height / 6;
+const height = Dimensions.get("window").height / 5;
 
 export function Footer() {
     const context = useContext(PlayerContext);
     const [delay, setDelay] = useState(false);
+    const [repeat, setRepeat] = useState(false);
+    const [random, setRandom] = useState(false);
 
     return(
         <View style={styles.container}>
@@ -38,20 +40,38 @@ export function Footer() {
                 <View style={styles.icons}>
                     <TouchableOpacity
                         onPress={() => {
+                            if (!context) return;
+                            context.options.random = !context.options.random;
+                            setRandom(context.options.random);
+                        }}
+                    >
+                        {
+                            random ? 
+                            <Icon color={"white"} size={25} name="shuffle-outline"/> : 
+                            <Icon color={"gray"} size={25} name="shuffle-outline"/>
+                        }
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
                             if (delay) return;
                             setDelay(true);
                             context?.previousAsync();
                             setTimeout(() => {
                                 setDelay(false);
-                            }, 800)
+                            }, 1000)
                         }}
                     >
                         <Icon color={"white"} size={45} name="play-skip-back-circle-outline"/>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
+                            if (delay) return;
+                            setDelay(true);
                             if (context?.playing) context.pauseAsync();
                             else context?.resumeAsync();
+                            setTimeout(() => {
+                                setDelay(false);
+                            }, 1000)
                         }}
                     >
                         {
@@ -69,10 +89,23 @@ export function Footer() {
                             context?.nextAsync();
                             setTimeout(() => {
                                 setDelay(false);
-                            }, 800)
+                            }, 1000)
                         }}
                     >
                         <Icon color={"white"} size={45} name="play-skip-forward-circle-outline"/>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (!context) return;
+                            context.options.repeat = !context.options.repeat;
+                            setRepeat(context.options.repeat);
+                        }}
+                    >
+                        {
+                            repeat ? 
+                            <Icon color={"white"} size={25} name="repeat-outline"/> : 
+                            <Icon color={"gray"} size={25} name="repeat-outline"/>
+                        }
                     </TouchableOpacity>
                 </View>
             </View>
@@ -121,6 +154,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         justifyContent: "center",
+        alignItems: "center",
         color: "white",
         gap: 40,
 
