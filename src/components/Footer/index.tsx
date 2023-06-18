@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text } from "react-native";
 import { PlayerContext } from "../../context/PlayerContext";
@@ -13,6 +13,7 @@ const height = Dimensions.get("window").height / 6;
 
 export function Footer() {
     const context = useContext(PlayerContext);
+    const [delay, setDelay] = useState(false);
 
     return(
         <View style={styles.container}>
@@ -36,7 +37,14 @@ export function Footer() {
             <View style={styles.containerManager}>
                 <View style={styles.icons}>
                     <TouchableOpacity
-                        onPress={context?.previousAsync}
+                        onPress={() => {
+                            if (delay) return;
+                            setDelay(true);
+                            context?.previousAsync();
+                            setTimeout(() => {
+                                setDelay(false);
+                            }, 800)
+                        }}
                     >
                         <Icon color={"white"} size={45} name="play-skip-back-circle-outline"/>
                     </TouchableOpacity>
@@ -55,7 +63,14 @@ export function Footer() {
                         }
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={context?.nextAsync}
+                        onPress={() => {
+                            if (delay) return;
+                            setDelay(true);
+                            context?.nextAsync();
+                            setTimeout(() => {
+                                setDelay(false);
+                            }, 800)
+                        }}
                     >
                         <Icon color={"white"} size={45} name="play-skip-forward-circle-outline"/>
                     </TouchableOpacity>
