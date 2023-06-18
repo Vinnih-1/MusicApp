@@ -37,7 +37,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
       }
 
       if (music.duration > music.position && music.status != PlayerStatus.STOPPED) {
-        music.position = music.position + 1;
+        music.position = music.position + (1 / 10);
       } else if (music.status == PlayerStatus.STOPPED) {
         clearInterval(intervalId);
         console.log(`Intervalo da música ${music.title} parado.`);
@@ -49,7 +49,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
         nextAsync();
       }
       console.log(`${music.position} - ${music.duration}: ${music.title}`)
-    }, 1000);
+    }, 100);
   }, [music]);
 
   const playAsync = async (props: MusicProps) => {
