@@ -3,7 +3,7 @@ import { Navbar } from './src/components/Navbar';
 import { Footer } from './src/components/Footer';
 import { Home } from './src/pages/Home';
 import { StatusBar } from 'expo-status-bar';
-import { PlayerProvider } from './src/components/PlayerContext';
+import { PlayerProvider } from './src/context/PlayerContext';
 
 export default function App() {
   return (
