@@ -4,7 +4,7 @@ import { View, StyleSheet, Text, Image, Dimensions, TouchableOpacity } from "rea
 import { PlayerContext } from "../../context/PlayerContext";
 
 import Icon from "react-native-vector-icons/Ionicons";
-import { MusicProps } from "../../services/MusicService";
+import { MusicProps, PlayerStatus } from "../../services/MusicService";
 
 const musicIcon = require("./../../assets/music_icon.png")
 const height = Dimensions.get("window").height / 10; 
@@ -15,7 +15,10 @@ export function CardMusic(props: MusicProps) {
     
     return(
         <TouchableOpacity style={styles.container}
-            onPress={() => context?.playAsync(props)}
+            onPress={async () => {
+                props.status = PlayerStatus.PLAYING;
+                context?.playAsync(props);
+            }}
         >
             <Image style={styles.image} source={musicIcon}/>
             <View style={styles.info}>
