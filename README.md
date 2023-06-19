@@ -6,8 +6,9 @@ Page Home:
 
 # TO-DO
 
-- Playlist system
+- ~~Repeat and random buttons~~
 - ~~Play skip back button and play skip forward button~~
+- Playlist system
 - Configuration page
 - Sidebar
 
