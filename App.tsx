@@ -4,16 +4,19 @@ import { Footer } from './src/components/Footer';
 import { Home } from './src/pages/Home';
 import { StatusBar } from 'expo-status-bar';
 import { PlayerProvider } from './src/context/PlayerContext';
+import { QueueProvider } from './src/context/QueueContext';
 
 export default function App() {
   return (
     <PlayerProvider>
-      <View style={styles.global}>
-        <Navbar/>
-        <Home/>
-        <Footer/>
-        <StatusBar hidden={false} translucent={false} style='light'/>
-      </View>
+      <QueueProvider>
+        <View style={styles.global}>
+          <Navbar/>
+          <Home/>
+          <Footer/>
+          <StatusBar hidden={false} translucent={false} style='light'/>
+        </View>
+      </QueueProvider>
     </PlayerProvider>
   );
 }
