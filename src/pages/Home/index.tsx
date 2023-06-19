@@ -14,7 +14,7 @@ export function Home() {
         MusicService.requestPermissions();
         let musicPromise = MusicService.searchAllMusics();
         musicPromise.then((music) => {
-          setMusics(music as unknown as MusicProps[]);
+            setMusics(music);
         }).then(() => setLoading(false));
     }, []);
 
