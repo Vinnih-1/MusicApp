@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
 
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text } from "react-native";
-import { PlayerContext } from "../../context/PlayerContext";
 import * as Progress from "react-native-progress";
 
 import Icon from "react-native-vector-icons/Ionicons";
+import { QueueContext } from "../../context/QueueContext";
+import { PlayerContext } from "../../context/PlayerContext";
+import { PlayerStatus } from "../../services/MusicService";
 
 const musicIcon = require("./../../assets/music_icon.png")
 
@@ -12,7 +14,9 @@ const width = Dimensions.get("window").width / 1.3;
 const height = Dimensions.get("window").height / 5;
 
 export function Footer() {
-    const context = useContext(PlayerContext);
+    const queueContext = useContext(QueueContext);
+    const playerContext = useContext(PlayerContext);
+
     const [delay, setDelay] = useState(false);
     const [repeat, setRepeat] = useState(false);
     const [random, setRandom] = useState(false);
@@ -25,7 +29,7 @@ export function Footer() {
                 </View>
                 <View style={styles.containerTitle}>
                     <Text style={styles.musicTitle}>{
-                        context?.music ? context?.music?.title.replace(".mp3", "") : "Nenhuma música selecionada."
+                        queueContext?.currentMusic ? queueContext?.currentMusic?.title.replace(".mp3", "") : "Nenhuma música selecionada."
                     }</Text>
                 </View>
             </View>
@@ -40,9 +44,9 @@ export function Footer() {
                 <View style={styles.icons}>
                     <TouchableOpacity
                         onPress={() => {
-                            if (!context) return;
-                            context.options.random = !context.options.random;
-                            setRandom(context.options.random);
+                            if (!playerContext) return;
+                            playerContext.options.random = !playerContext.options.random;
+                            setRandom(playerContext.options.random);
                         }}
                     >
                         {
@@ -54,28 +58,33 @@ export function Footer() {
                     <TouchableOpacity
                         onPress={() => {
                             if (delay) return;
+
+                            if (queueContext?.currentMusic) {
+                                if (queueContext.intervalId) queueContext.stopInterval(queueContext.intervalId);
+                                queueContext.stopTrack(queueContext.currentMusic).then(() => {
+                                    if (queueContext.currentMusic) queueContext.previousTrack(queueContext.currentMusic)
+                                });
+                            }
                             setDelay(true);
-                            context?.previousAsync();
-                            setTimeout(() => {
+
+                            setInterval(() => {
                                 setDelay(false);
-                            }, 1000)
+                            }, 1000);
                         }}
                     >
                         <Icon color={"white"} size={45} name="play-skip-back-circle-outline"/>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            if (delay) return;
-                            setDelay(true);
-                            if (context?.playing) context.pauseAsync();
-                            else context?.resumeAsync();
-                            setTimeout(() => {
-                                setDelay(false);
-                            }, 1000)
+                            if (!queueContext) return;
+                            if (!queueContext.currentMusic) return;
+
+                            if (queueContext.currentMusic.status === PlayerStatus.PLAYING) queueContext.pauseTrack(queueContext.currentMusic);
+                            else queueContext?.resumeTrack(queueContext.currentMusic);
                         }}
                     >
                         {
-                            context?.playing
+                            queueContext?.currentMusic?.status == PlayerStatus.PLAYING
                             ?
                             <Icon color={"white"} size={45} name="pause-circle-outline"/>
                             :
@@ -85,20 +94,32 @@ export function Footer() {
                     <TouchableOpacity
                         onPress={() => {
                             if (delay) return;
+
+                            if (queueContext?.currentMusic) {
+                                if (queueContext.intervalId) queueContext.stopInterval(queueContext.intervalId);
+                                queueContext.stopTrack(queueContext.currentMusic).then(() => {
+                                    if (queueContext.currentMusic && repeat) {
+                                        if (queueContext.hasNext()) queueContext.nextTrack(queueContext.currentMusic);
+                                        else console.log("a")
+                                    } else {
+                                        if (queueContext.intervalId) queueContext.stopInterval(queueContext.intervalId);
+                                    }
+                                });
+                            }
                             setDelay(true);
-                            context?.nextAsync();
-                            setTimeout(() => {
+
+                            setInterval(() => {
                                 setDelay(false);
-                            }, 1000)
+                            }, 1000);
                         }}
                     >
                         <Icon color={"white"} size={45} name="play-skip-forward-circle-outline"/>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            if (!context) return;
-                            context.options.repeat = !context.options.repeat;
-                            setRepeat(context.options.repeat);
+                            if (!playerContext) return;
+                            playerContext.options.repeat = !playerContext.options.repeat;
+                            setRepeat(playerContext.options.repeat);
                         }}
                     >
                         {
