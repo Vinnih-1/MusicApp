@@ -2,7 +2,7 @@
 
 Page Home:
 
-![Screenshot_20230618-170312](https://github.com/Vinnih-1/MusicApp/assets/59892753/680b8a21-1d9a-44ee-8618-0f46551a372d)
+![Screenshot_20230620-052144 (1)](https://github.com/Vinnih-1/MusicApp/assets/59892753/80c351d2-6be2-4299-b04c-d13616694018)
 
 # TO-DO
 
@@ -18,6 +18,7 @@ Page Home:
 - expo-media-library
 - expo-keep-awake
 - react-native-vector-icons
+- [and more...](https://github.com/Vinnih-1/MusicApp/blob/master/package.json)
 
 ## What i learned about React?
 
