@@ -100,10 +100,7 @@ export function Footer() {
                                 queueContext.stopTrack(queueContext.currentMusic).then(() => {
                                     if (queueContext.currentMusic && repeat) {
                                         if (queueContext.hasNext()) queueContext.nextTrack(queueContext.currentMusic);
-                                        else console.log("a")
-                                    } else {
-                                        if (queueContext.intervalId) queueContext.stopInterval(queueContext.intervalId);
-                                    }
+                                    } else if (queueContext.intervalId) queueContext.stopInterval(queueContext.intervalId);
                                 });
                             }
                             setDelay(true);
