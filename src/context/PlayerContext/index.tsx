@@ -18,8 +18,8 @@ export interface PlayerContextProps {
 }
 
 export interface PlayerOptionsProps {
-  repeat: false;
-  random: false;
+  repeat: boolean;
+  random: boolean;
 }
   
 export const PlayerContext = createContext<PlayerContextProps | undefined>(undefined);
@@ -147,10 +147,7 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
     previousAsync,
     music,
     playing,
-    options: {
-      random: false,
-      repeat: false
-    }
+    options
   };
   
   return (
