@@ -13,6 +13,7 @@ interface QueueContextProps {
     nextTrack: (props: MusicProps) => void;
     previousTrack: (props: MusicProps) => void;
     stopInterval: (interval: NodeJS.Timer) => void;
+    hasNext: () => boolean;
     intervalId?: NodeJS.Timer;
 }
 
@@ -41,6 +42,7 @@ export function QueueProvider({children}: QueueProviderProps) {
                 nextTrack,
                 previousTrack,
                 stopInterval,
+                hasNext,
                 intervalId
             });
         });
@@ -50,12 +52,10 @@ export function QueueProvider({children}: QueueProviderProps) {
         setQueue({ 
             queue: queue ? queue.queue : [], currentMusic: music, playTrack, 
             pauseTrack, resumeTrack, stopTrack, nextTrack, previousTrack,
-            stopInterval, intervalId
+            stopInterval, hasNext , intervalId
         })
-
         const interval = setInterval(() => {
             if (!music) {
-                stopInterval(interval);
                 return;
             }
 
@@ -73,9 +73,8 @@ export function QueueProvider({children}: QueueProviderProps) {
                 if (music.position == music.duration) {
                     stopTrack(music);
                     
-                    if (hasNext()) {
-                        nextTrack(getNextTrack(music));
-                    }
+                    if (hasNext()) nextTrack(music)
+                    else setMusic(undefined);
                 }
             }
         }, 1000);
@@ -84,6 +83,10 @@ export function QueueProvider({children}: QueueProviderProps) {
     }, [music]);
 
     async function playTrack(props: MusicProps) {
+        if (music === props) {
+            setMusic(undefined);
+        }
+
         props.status = PlayerStatus.PLAYING;
         setMusic(props);
 
@@ -106,14 +109,24 @@ export function QueueProvider({children}: QueueProviderProps) {
         });
     }
 
-    function resumeTrack(props: MusicProps) {
+    async function resumeTrack(props: MusicProps) {
+        props.status = PlayerStatus.PLAYING;
+        setMusic(undefined);
+
+        if (!audio) return;
+        await audio.playFromPositionAsync(props.position * 1000);
+        setMusic(props);
+        console.log(`Retomando música: ${props.title}`);
     }
 
     async function stopTrack(props: MusicProps) {
         props.status = PlayerStatus.NONE;
+        props.position = 0;
         setMusic(props);
 
         if (!audio) return;
+        if (!audio._loaded) return;
+
         await audio.stopAsync();
         await audio.unloadAsync();
         
@@ -121,23 +134,24 @@ export function QueueProvider({children}: QueueProviderProps) {
     }
 
     function nextTrack(props: MusicProps) {
-        setMusic(props);
-        playTrack(props).then(() => console.log(`Passando para a próxima música: ${props.title}`));   
-    }
-
-    function previousTrack() {
-
-    }
-
-    function getNextTrack(props: MusicProps): MusicProps{
         if (!queue) return props;
         const index = queue.queue.findIndex(music => music.uri === props.uri) + 1;
-        if (queue.queue.length <= index) return queue.queue[0];
+        if (queue.queue.length <= index) playTrack(queue.queue[0]);
+        else playTrack(queue.queue[index]).then(() => console.log(`Passando para a próxima música`));   
+    }
 
-        return queue.queue[index];
-    } 
+    function previousTrack(props: MusicProps) {
+        if (!queue) return props;
+        const index = queue.queue.findIndex(music => music.uri === props.uri) - 1;
+        if (index == -1) playTrack(queue.queue[0]);
+        else playTrack(queue.queue[index]);
+        console.log(`Passando para a música anterior`);
+    }
 
     function hasNext(): boolean {
+        if (!playerContext) return false;
+        if (!playerContext.options.repeat) return false;
+
         if (!queue || !music) return false;
         const currentIndex = queue.queue.findIndex(musics => musics.uri === music.uri);
         return queue.queue.length > currentIndex;
@@ -159,6 +173,7 @@ export function QueueProvider({children}: QueueProviderProps) {
         nextTrack,
         previousTrack,
         stopInterval,
+        hasNext,
         intervalId
     }
 
