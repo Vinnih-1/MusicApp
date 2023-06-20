@@ -109,7 +109,7 @@ export function Footer() {
                             if (queueContext?.currentMusic) {
                                 if (queueContext.intervalId) queueContext.stopInterval(queueContext.intervalId);
                                 queueContext.stopTrack(queueContext.currentMusic).then(() => {
-                                    if (queueContext.currentMusic && repeat) {
+                                    if (queueContext.currentMusic) {
                                         if (queueContext.hasNext()) queueContext.nextTrack(queueContext.currentMusic);
                                     } else if (queueContext.intervalId) queueContext.stopInterval(queueContext.intervalId);
                                 });
