@@ -8,6 +8,7 @@ Page Home:
 
 - ~~Repeat and random buttons~~
 - ~~Play skip back button and play skip forward button~~
+- Music manager with dropdown
 - Playlist system
 - Configuration page
 - Sidebar
