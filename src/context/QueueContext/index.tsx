@@ -56,6 +56,7 @@ export function QueueProvider({children}: QueueProviderProps) {
         })
         const interval = setInterval(() => {
             if (!music) {
+                stopInterval(interval);
                 return;
             }
 
@@ -74,7 +75,7 @@ export function QueueProvider({children}: QueueProviderProps) {
                     stopTrack(music);
                     
                     if (hasNext()) stopTrack(music).then(() => nextTrack(music));
-                    else setMusic(undefined);
+                    else stopTrack(music).then(() => setMusic(undefined));
                 }
             }
         }, 1080);
