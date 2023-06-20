@@ -30,7 +30,7 @@ class MusicService {
 
         const musics = filteredMusic.map(music => ({
             title: music.filename,
-            duration: Math.round(music.duration),
+            duration: Math.round(music.duration) + 10,
             uri: music.uri,
             status: PlayerStatus.NONE,
             position: 0
