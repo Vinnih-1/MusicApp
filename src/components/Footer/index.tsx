@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { View, StyleSheet, Dimensions, TouchableOpacity, Image, Text } from "react-native";
 import * as Progress from "react-native-progress";
@@ -6,7 +6,7 @@ import * as Progress from "react-native-progress";
 import Icon from "react-native-vector-icons/Ionicons";
 import { QueueContext } from "../../context/QueueContext";
 import { PlayerContext } from "../../context/PlayerContext";
-import { PlayerStatus } from "../../services/MusicService";
+import MusicService, { PlayerStatus } from "../../services/MusicService";
 
 const musicIcon = require("./../../assets/music_icon.png")
 
@@ -20,6 +20,17 @@ export function Footer() {
     const [delay, setDelay] = useState(false);
     const [repeat, setRepeat] = useState(false);
     const [random, setRandom] = useState(false);
+
+    useEffect(() => {
+        if (!queueContext) return;
+
+        if (random) queueContext.shuffleQueue();
+        else {
+            MusicService.searchAllMusics().then(defaultQueue => {
+                queueContext.unshuffleQueue(defaultQueue);
+            });
+        }
+    }, [random]);
 
     return(
         <View style={styles.container}>

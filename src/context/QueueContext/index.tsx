@@ -13,6 +13,8 @@ interface QueueContextProps {
     nextTrack: (props: MusicProps) => void;
     previousTrack: (props: MusicProps) => void;
     stopInterval: (interval: NodeJS.Timer) => void;
+    shuffleQueue: () => void;
+    unshuffleQueue: (queue: MusicProps[]) => void;
     hasNext: () => boolean;
     intervalId?: NodeJS.Timer;
 }
@@ -42,6 +44,8 @@ export function QueueProvider({children}: QueueProviderProps) {
                 nextTrack,
                 previousTrack,
                 stopInterval,
+                shuffleQueue,
+                unshuffleQueue,
                 hasNext,
                 intervalId
             });
@@ -52,7 +56,7 @@ export function QueueProvider({children}: QueueProviderProps) {
         setQueue({ 
             queue: queue ? queue.queue : [], currentMusic: music, playTrack, 
             pauseTrack, resumeTrack, stopTrack, nextTrack, previousTrack,
-            stopInterval, hasNext , intervalId
+            stopInterval, shuffleQueue, unshuffleQueue , hasNext , intervalId
         })
         const interval = setInterval(() => {
             if (!music) {
@@ -169,6 +173,25 @@ export function QueueProvider({children}: QueueProviderProps) {
         clearInterval(interval);
     }
 
+    function shuffleQueue() {
+        if (!queue) return;
+        const shuffledQueue = queue.queue.sort(() => Math.random() - 0.5);
+
+        setQueue({ 
+            queue: shuffledQueue, currentMusic: music, playTrack, 
+            pauseTrack, resumeTrack, stopTrack, nextTrack, previousTrack,
+            stopInterval, shuffleQueue, unshuffleQueue, hasNext , intervalId
+        });
+    }
+
+    function unshuffleQueue(queue: MusicProps[]) {
+        setQueue({ 
+            queue: queue, currentMusic: music, playTrack, 
+            pauseTrack, resumeTrack, stopTrack, nextTrack, previousTrack,
+            stopInterval, shuffleQueue, unshuffleQueue, hasNext , intervalId
+        });
+    }
+
     const contextValues: QueueContextProps = {
         queue: queue ? queue.queue : [],
         currentMusic: music,
@@ -179,6 +202,8 @@ export function QueueProvider({children}: QueueProviderProps) {
         nextTrack,
         previousTrack,
         stopInterval,
+        shuffleQueue,
+        unshuffleQueue,
         hasNext,
         intervalId
     }
