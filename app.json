@@ -25,10 +25,16 @@
       "permissions": [
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
-      ]
+      ],
+      "package": "com.zumy.musicapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1433d925-27d4-41e6-9f56-b3e08fc0d01b"
+      }
     }
   }
 }
