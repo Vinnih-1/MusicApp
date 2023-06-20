@@ -73,11 +73,11 @@ export function QueueProvider({children}: QueueProviderProps) {
                 if (music.position == music.duration) {
                     stopTrack(music);
                     
-                    if (hasNext()) nextTrack(music)
+                    if (hasNext()) stopTrack(music).then(() => nextTrack(music));
                     else setMusic(undefined);
                 }
             }
-        }, 1000);
+        }, 1080);
 
         setIntervalId(interval);
     }, [music]);
@@ -149,12 +149,17 @@ export function QueueProvider({children}: QueueProviderProps) {
     }
 
     function hasNext(): boolean {
-        if (!playerContext) return false;
-        if (!playerContext.options.repeat) return false;
-
         if (!queue || !music) return false;
-        const currentIndex = queue.queue.findIndex(musics => musics.uri === music.uri);
-        return queue.queue.length > currentIndex;
+        if (!playerContext) return false;
+
+        const currentIndex = queue.queue.findIndex(musics => musics.uri === music.uri) + 1;
+        
+        if (queue.queue.length > currentIndex) {
+            return true;
+        } else if (playerContext.options.repeat) {
+            return true;
+        }
+        return false;
     }
 
     function stopInterval(interval: NodeJS.Timer) {
